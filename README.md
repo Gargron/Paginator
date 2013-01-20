@@ -50,3 +50,7 @@ to localize your application, you'll be happy your Paginator class doesn't need 
     		<li><a href="/?offset=60">Next</a></li>
     	</ul>
     </div><!-- Bootstrap-ready :D -->
+
+### License
+
+Paginator is released under the [MIT license](http://www.opensource.org/licenses/MIT).
