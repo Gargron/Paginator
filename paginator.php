@@ -99,8 +99,8 @@ class Paginator
 	
 	public function links()
 	{
-		$all_pages    = ceil($this->$total  / $this->$limit);
-		$current_page = ceil($this->$offset / $this->$limit);
+		$all_pages    = ceil($this->total  / $this->limit);
+		$current_page = ceil($this->offset / $this->limit);
 		$from_page    = max($current_page - 3, 0);
 		$to_page      = min($current_page + 3, $all_pages);
 
@@ -113,22 +113,22 @@ class Paginator
 
 		if($current_page > 0)
 		{
-			$string .= '<li>' . $this->link(__('pagination.previous'), ($current_page - 1) * $this->$limit) . '</li>';
+			$string .= '<li>' . $this->link(__('pagination.previous'), ($current_page - 1) * $this->limit) . '</li>';
 		}
 
 		for($i = $from_page; $i < $to_page; $i++)
 		{
-			$string .= '<li ' . ($current_page == $i ? 'class="active"' : '') . '>' . $this->link($i + 1, $i * $this->$limit) . '</li>';
+			$string .= '<li ' . ($current_page == $i ? 'class="active"' : '') . '>' . $this->link($i + 1, $i * $this->limit) . '</li>';
 		}
 
 		if(($current_page + 1) < $all_pages)
 		{
-			$string .= '<li>' . $this->link(__('pagination.next'), ($current_page + 1) * $this->$limit) . '</li>';
+			$string .= '<li>' . $this->link(__('pagination.next'), ($current_page + 1) * $this->limit) . '</li>';
 		}
 
 		if(($current_page + 3) < $all_pages)
 		{
-			$string .= '<li>' . $this->link(__('pagination.last'), $all_pages * $this->$limit - $this->$limit) . '</li>';
+			$string .= '<li>' . $this->link(__('pagination.last'), $all_pages * $this->limit - $this->limit) . '</li>';
 		}
 
 		$string .= '</ul></div>';
@@ -148,6 +148,6 @@ class Paginator
 	{
 		$query_string = array_merge($this->inputArray, array('offset' => $offset));
 
-		return '<a href="' . ($this->url . '?' . http_build_query($query_string) . '">' . $text . '</a>';
+		return '<a href="' . $this->url . '?' . http_build_query($query_string) . '">' . $text . '</a>';
 	}
 }
