@@ -99,6 +99,7 @@ class Paginator
 	
 	public function links()
 	{
+		# Calculating page numbers from offsets and total items
 		$all_pages    = ceil($this->total  / $this->limit);
 		$current_page = ceil($this->offset / $this->limit);
 		$from_page    = max($current_page - 3, 0);
@@ -108,26 +109,31 @@ class Paginator
 
 		if($current_page > 3)
 		{
+			# Page we're on is 3 farther than the first one, so we need a "First" link
 			$string .= '<li>' . $this->link(__('pagination.first'), 0) . '</li>';
 		}
 
 		if($current_page > 0)
 		{
+			# This is not the first page so we need a "Previous" link
 			$string .= '<li>' . $this->link(__('pagination.previous'), ($current_page - 1) * $this->limit) . '</li>';
 		}
 
 		for($i = $from_page; $i < $to_page; $i++)
 		{
+			# Print the window of page links from three before current to three after current
 			$string .= '<li ' . ($current_page == $i ? 'class="active"' : '') . '>' . $this->link($i + 1, $i * $this->limit) . '</li>';
 		}
 
 		if(($current_page + 1) < $all_pages)
 		{
+			# This is not the last page so we need a "Next" link
 			$string .= '<li>' . $this->link(__('pagination.next'), ($current_page + 1) * $this->limit) . '</li>';
 		}
 
 		if(($current_page + 3) < $all_pages)
 		{
+			# These are not the last three pages so we need a "Last" link
 			$string .= '<li>' . $this->link(__('pagination.last'), $all_pages * $this->limit - $this->limit) . '</li>';
 		}
 
@@ -146,6 +152,12 @@ class Paginator
 
 	protected function link($text, $offset)
 	{
+		# This little snippet will merge query paramaters from the existing request
+		# to the link to the other pages to preserve them, so for example:
+		#   example?sort=updated
+		# becomes
+		#   example?sort=updated&offset=20
+		# The offset parameter will be overwritten however.
 		$query_string = array_merge($this->inputArray, array('offset' => $offset));
 
 		return '<a href="' . $this->url . '?' . http_build_query($query_string) . '">' . $text . '</a>';
