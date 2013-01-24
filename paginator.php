@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-namespace Paginator;
+namespace Gargron;
 
 /**
  * Simple pagination library
