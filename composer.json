@@ -1,0 +1,19 @@
+{
+    "name": "gargron/paginator",
+    "type": "library",
+    "description": "A minimal pagination class",
+    "homepage": "https://github.com/Gargron/Paginator",
+    "license": "MIT",
+    "keywords": ["pagination"],
+    "authors": [
+        {
+          "name": "Eugen Rochko",
+          "email": "eugen@zeonfederated.com",
+          "homepage": "http://zeonfederated.com",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
