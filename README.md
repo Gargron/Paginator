@@ -12,12 +12,36 @@ In your controller/route:
     $total_items = 60;
     $query_items = array('something' => 'to_persist_on_paginator_links');
     
-    $paginator   = new Paginator\Paginator('/example/url', $offset, $per_page, $total_items, $query_items);
+    $paginator   = new Gargron\Paginator('/example/url', $offset, $per_page, $total_items, $query_items);
     ?>
 
 In your view or wherever you want the links rendered:
 
     <?php echo $paginator->links(); ?>
+
+## Alternative usage
+
+If you don't want to count the total number of results (as it may be an expensive and unneccessary query),
+the paginator can render simple next/previous links instead, but guessing if the respective link is needed.
+
+    <?php
+    $offset      = intval($_GET['offset']);
+    $per_page    = 20; # We want to display only 20 items per page
+    $results     = DB::query("SELECT * FROM test LIMIT ?, 21", array($offset)); # But we fetch maximally 21
+    $fetched     = count($results); # We count how many we *actually* fetched
+    $results     = array_slice($results, 0, 20); # We strip away the items that we don't want to display
+    $query_items = array('something' => 'to_persist_on_paginator_links');
+    
+    $paginator   = new Gargron\Paginator('/example/url', $offset, $per_page, null, $query_items);
+    $paginator->currentFetched = $fetched;
+
+In your view or where you want the links rendered:
+
+    <?php echo $paginator->links(); ?>
+
+The logic behind this is very simple. If the number of actually fetched items is greater than the number
+of items we want to display per page, it means there *is* a next page available. As for the previous link,
+if the offset is greater than 0, there must be a previous page.
 
 ## Localization (and dependency)
 
