@@ -49,6 +49,15 @@ class Paginator
 	public $offset;
 
 	/**
+	 * The number of currently fetched items
+	 * Should help determine if there is a next page
+	 * 
+	 * @var integer
+	 */
+	
+	public $currentFetched;
+
+	/**
 	 * Current base URL
 	 *
 	 * @var string
@@ -99,6 +108,12 @@ class Paginator
 	
 	public function links()
 	{
+		if(is_null($this->total))
+		{
+			# Render simple next/previous links if the total count is not given
+			return $this->unknown_links();
+		}
+
 		# Calculating page numbers from offsets and total items
 		$all_pages    = ceil($this->total  / $this->limit);
 		$current_page = ceil($this->offset / $this->limit);
@@ -138,6 +153,35 @@ class Paginator
 		}
 
 		$string .= '</ul></div>';
+
+		return $string;
+	}
+
+	/**
+	 * Generate next/previous links only because we don't know the
+	 * total number of items/pages beforehand
+	 * 
+	 * @return string
+	 */
+	
+	public function unknown_links()
+	{
+		$string = '<ul class="pager">';
+
+		if($this->offset > 0)
+		{
+			# If the offset is not 0 then there should be a previous page
+			$string .= '<li>' . $this->link(__('pagination.previous'), max($this->offset - $this->limit, 0)) . '</li>';
+		}
+
+		if($this->currentFetched > $this->limit)
+		{
+			# If we always fetch one more item than we display then we can guess if
+			# there is a next page
+			$string .= '<li>' . $this->link(__('pagination.next'), $this->offset + $this->limit) . '</li>';
+		}
+
+		$string .= '</ul>';
 
 		return $string;
 	}
